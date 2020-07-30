@@ -24,6 +24,8 @@ import (
 	"math/big"
 	"os"
 	"testing"
+	
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSm2(t *testing.T) {
@@ -162,4 +164,57 @@ func TestKEB2(t *testing.T) {
 	if bytes.Compare(Sa, S2) != 0 {
 		t.Error("hash verfication failed")
 	}
+}
+
+func TestReadCertificateFromPem(t *testing.T) {
+        // gm版本 cryptogen 工具 生成 的自签名 CA
+	var certPem = `-----BEGIN CERTIFICATE-----
+MIICUjCCAfegAwIBAgIQYYTprq/7P3K7xn2w6qhTkDAKBggqgRzPVQGDdTBzMQsw
+CQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy
+YW5jaXNjbzEZMBcGA1UEChMQb3JnMS5leGFtcGxlLmNvbTEcMBoGA1UEAxMTY2Eu
+b3JnMS5leGFtcGxlLmNvbTAeFw0yMDA0MTMwMzMzNTFaFw0zMDA0MTEwMzMzNTFa
+MHMxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1T
+YW4gRnJhbmNpc2NvMRkwFwYDVQQKExBvcmcxLmV4YW1wbGUuY29tMRwwGgYDVQQD
+ExNjYS5vcmcxLmV4YW1wbGUuY29tMFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAE
+eq64uveK/KX8jnZZ/5IOoIPpdSIV+gGmD2N8abr2/EKz5KE2zbxNRXcCvTUnO1pN
+360Bk2YEk+T/BW4FFDjX+aNtMGswDgYDVR0PAQH/BAQDAgGmMB0GA1UdJQQWMBQG
+CCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MCkGA1UdDgQiBCBx
+R+y7n5LEXeBKUxxXE/uhAEsC+ZWxpUdTkkVK0VAU1TAKBggqgRzPVQGDdQNJADBG
+AiEAzIefgCfH8xEEOCVzMFwn3sBHlxT62qiVBAQa/RmfjuACIQDrDFELRK4UnDfp
+Y2IzEADy1jvAgdSAJiU2EPCba5VpNg==
+-----END CERTIFICATE-----`
+
+        // TestSm2 生成的 CA 证书
+	var selfTestGenerateCertPem = `-----BEGIN CERTIFICATE-----
+MIIDMzCCAtqgAwIBAgIB/zAKBggqgRzPVQGDdTBIMQ0wCwYDVQQKEwRURVNUMRkw
+FwYDVQQDExB0ZXN0LmV4YW1wbGUuY29tMQ8wDQYDVQQqEwZHb3BoZXIxCzAJBgNV
+BAYTAk5MMB4XDTcwMDEwMTAwMTY0MFoXDTcwMDEwMjAzNDY0MFowSDENMAsGA1UE
+ChMEVEVTVDEZMBcGA1UEAxMQdGVzdC5leGFtcGxlLmNvbTEPMA0GA1UEKhMGR29w
+aGVyMQswCQYDVQQGEwJOTDBZMBMGByqGSM49AgEGCCqBHM9VAYItA0IABNK3zTaa
+4T9a8w7LmIImcDLWl4Fqy7bk0LUlFlhU7ZAnP8CCIAP/ijlc5jvdRHFXkVY+GO6M
+UdGasbNs/LMhnDijggGzMIIBrzAOBgNVHQ8BAf8EBAMCAgQwJgYDVR0lBB8wHQYI
+KwYBBQUHAwIGCCsGAQUFBwMBBgIqAwYDgQsBMA8GA1UdEwEB/wQFMAMBAf8wXwYI
+KwYBBQUHAQEEUzBRMCMGCCsGAQUFBzABhhdodHRwOi8vb2NzcC5leGFtcGxlLmNv
+bTAqBggrBgEFBQcwAoYeaHR0cDovL2NydC5leGFtcGxlLmNvbS9jYTEuY3J0MEYG
+A1UdEQQ/MD2CEHRlc3QuZXhhbXBsZS5jb22BEWdvcGhlckBnb2xhbmcub3JnhwR/
+AAABhxAgAUhgAAAgAQAAAAAAAABoMA8GA1UdIAQIMAYwBAYCKgMwKgYDVR0eBCMw
+IaAfMA6CDC5leGFtcGxlLmNvbTANggtleGFtcGxlLmNvbTBXBgNVHR8EUDBOMCWg
+I6Ahhh9odHRwOi8vY3JsMS5leGFtcGxlLmNvbS9jYTEuY3JsMCWgI6Ahhh9odHRw
+Oi8vY3JsMi5leGFtcGxlLmNvbS9jYTEuY3JsMBYGAyoDBAQPZXh0cmEgZXh0ZW5z
+aW9uMA0GA1UdDgQGBAQEAwIBMAoGCCqBHM9VAYN1A0cAMEQCIAFl6HuA0qntdsGh
+9SBSf6/JCtZmeSGuNbr1PgNRqDupAiA4UXAzrPBgAbIN3CWjQV28QCorLCvQ3Xct
+fyXNzlRCtA==
+-----END CERTIFICATE-----`
+	cert, err := ReadCertificateFromMem([]byte(certPem))
+	assert.NoError(t,err,"ReadCertificateFromMem Failed.")
+
+	err = cert.CheckSignature(cert.SignatureAlgorithm, cert.RawTBSCertificate, cert.Signature)
+	assert.NoError(t,err,"CheckSignature Failed")
+
+
+	cert2,err := ReadCertificateFromMem([]byte(selfTestGenerateCertPem))
+	assert.NoError(t,err,"ReadCertificateFromMem Failed.")
+
+	err = cert.CheckSignature(cert2.SignatureAlgorithm, cert2.RawTBSCertificate, cert2.Signature)
+	assert.NoError(t,err,"CheckSignature Failed")
 }
