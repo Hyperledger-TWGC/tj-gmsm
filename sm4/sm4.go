@@ -573,7 +573,6 @@ func GHASH(H []byte,A []byte,C []byte) (X[]byte){
 			m=1
 			v=v*8
 		}else if(m!=0 && v==0) {
-			m=m
 			v=BlockSize*8
 		}else if(m!=0 && v!=0){
 			m=m+1
@@ -706,7 +705,6 @@ func GCMEncrypt(K,IV,P,A []byte) (C,T []byte){
 			m=1
 			v=v*8
 		}else if(m!=0 && v==0) {
-			m=m
 			v=BlockSize*8
 		}else if(m!=0 && v!=0){
 			m=m+1
@@ -764,7 +762,6 @@ func GCMDecrypt(K,IV,C,A []byte)(P,_T []byte){
 			m=1
 			v=v*8
 		}else if(m!=0 && v==0) {
-			m=m
 			v=BlockSize*8
 		}else if(m!=0 && v!=0){
 			m=m+1
