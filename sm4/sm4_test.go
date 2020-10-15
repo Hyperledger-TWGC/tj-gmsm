@@ -16,6 +16,7 @@ limitations under the License.
 package sm4
 
 import (
+	"bytes"
 	"fmt"
 	"reflect"
 	"testing"
@@ -91,6 +92,35 @@ func TestSM4(t *testing.T) {
 		return
 	}
 	fmt.Printf("cbcOFB = %x\n", cbcOfc)
+
+	//-----------------------------------------------//
+	IV :=make([]byte,BlockSize)
+	//验证数据A可以是任意的长度0 or n
+	//A:= []byte{0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef, 0xfe, 0xdc, 0xba, 0x98, 0x76, 0x54, 0x32, 0x10}
+	A:= []byte{0x01, 0x23, 0x45, 0x67, 0x89}
+	//A:= []byte{}
+	gcmMsg,T,err:=Sm4GCM(key,IV,data,A,true)
+	if err !=nil{
+		t.Errorf("sm4 enc error:%s", err)
+	}
+	fmt.Printf("gcmMsg = %x\n", gcmMsg)
+	gcmDec,T_,err:=Sm4GCM(key,IV,gcmMsg,A,false)
+	if err != nil{
+		t.Errorf("sm4 dec error:%s", err)
+	}
+	fmt.Printf("gcmDec = %x\n", gcmDec)
+	if bytes.Compare(T,T_)==0{
+		fmt.Println("authentication successed")
+	}
+	//验证失败测试
+	B:= []byte{0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd}
+	gcmDec,T_,err=Sm4GCM(key,IV,gcmMsg,B,false)
+	if err != nil{
+		t.Errorf("sm4 dec error:%s", err)
+	}
+	if bytes.Compare(T,T_)!=0{
+		fmt.Println("authentication failed")
+	}
 }
 
 func BenchmarkSM4(t *testing.B) {
