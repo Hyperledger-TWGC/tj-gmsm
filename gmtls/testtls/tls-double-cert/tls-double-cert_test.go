@@ -16,15 +16,15 @@ var end chan bool
 
 const (
 	address            = "127.0.0.1:6443"
-	caFile             = "../asserts/sm2-double-cert/CA.cert.pem"
-	serverSignCertFile = "../asserts/sm2-double-cert/SS.cert.pem"
-	serverSignKeyFile  = "../asserts/sm2-double-cert/SS.key.pem"
-	serverEncCertFile  = "../asserts/sm2-double-cert/SE.cert.pem"
-	serverEncKeyFile   = "../asserts/sm2-double-cert/SE.key.pem"
-	clientSignCertFile = "../asserts/sm2-double-cert/CS.cert.pem"
-	clientSignKeyFile  = "../asserts/sm2-double-cert/CS.key.pem"
-	clientEncCertFile  = "../asserts/sm2-double-cert/CE.cert.pem"
-	clientEncKeyFile   = "../asserts/sm2-double-cert/CE.key.pem"
+	caFile             = "../asserts/sm2-double-cert/CA.crt"
+	serverSignCertFile = "../asserts/sm2-double-cert/SS.crt"
+	serverSignKeyFile  = "../asserts/sm2-double-cert/SS.key"
+	serverEncCertFile  = "../asserts/sm2-double-cert/SE.crt"
+	serverEncKeyFile   = "../asserts/sm2-double-cert/SE.key"
+	clientSignCertFile = "../asserts/sm2-double-cert/CS.crt"
+	clientSignKeyFile  = "../asserts/sm2-double-cert/CS.key"
+	clientEncCertFile  = "../asserts/sm2-double-cert/CE.crt"
+	clientEncKeyFile   = "../asserts/sm2-double-cert/CE.key"
 )
 
 func Test(t *testing.T) {

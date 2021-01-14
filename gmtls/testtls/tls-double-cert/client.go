@@ -10,11 +10,11 @@ import (
 
 func main() {
 	const address = "127.0.0.1:6443"
-	const caFile = "../asserts/sm2-double-cert/CA.cert.pem"
-	const signCertFile = "../asserts/sm2-double-cert/CS.cert.pem"
-	const signKeyFile = "../asserts/sm2-double-cert/CS.key.pem"
-	const encCertFile = "../asserts/sm2-double-cert/CE.cert.pem"
-	const encKeyFile = "../asserts/sm2-double-cert/CE.key.pem"
+	const caFile = "../asserts/sm2-double-cert/CA.crt"
+	const signCertFile = "../asserts/sm2-double-cert/CS.crt"
+	const signKeyFile = "../asserts/sm2-double-cert/CS.key"
+	const encCertFile = "../asserts/sm2-double-cert/CE.crt"
+	const encKeyFile = "../asserts/sm2-double-cert/CE.key"
 
 	clientRun(address, caFile, signCertFile, signKeyFile, encCertFile, encKeyFile)
 }
