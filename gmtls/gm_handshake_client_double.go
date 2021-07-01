@@ -291,7 +291,7 @@ func (hs *clientHandshakeStateGM) doFullHandshake() error {
 	} else if ka, ok := keyAgreement.(*ecdheKeyAgreementGM); ok {
 		ka.isServer = false
 		ka.encCert = &c.config.Certificates[1]
-		ka.peerEncCert = c.peerCertificates[1]
+		ka.peerCert = c.peerCertificates[1]
 	}
 
 	skx, ok := msg.(*serverKeyExchangeMsg)

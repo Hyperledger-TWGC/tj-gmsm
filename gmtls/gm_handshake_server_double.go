@@ -458,6 +458,14 @@ func (hs *serverHandshakeStateGM) doFullHandshake() error {
 	}
 	hs.finishedHash.Write(ckx.marshal())
 
+	if ka, ok := keyAgreement.(*eccKeyAgreementGM); ok {
+		ka.encipherCert = c.peerCertificates[1]
+	} else if ka, ok := keyAgreement.(*ecdheKeyAgreementGM); ok {
+		ka.isServer = true
+		ka.encCert = &c.config.Certificates[1]
+		ka.peerCert = c.peerCertificates[1]
+	}
+
 	preMasterSecret, err := keyAgreement.processClientKeyExchange(c.config, &hs.cert[1], ckx, c.vers)
 	if err != nil {
 		c.sendAlert(alertHandshakeFailure)
@@ -634,12 +642,17 @@ func (hs *serverHandshakeStateGM) processCertsFromClient(certificates [][]byte) 
 	c := hs.c
 
 	hs.certsFromClient = certificates
-	certs := make([]*x509.Certificate, len(certificates))
+	certs := make([]*x509.Certificate, 0)
 	var err error
-	for i, asn1Data := range certificates {
-		if certs[i], err = x509.ParseCertificate(asn1Data); err != nil {
+	var cert *x509.Certificate
+	for _, asn1Data := range certificates {
+		if cert, err = x509.ParseCertificate(asn1Data); err != nil {
 			c.sendAlert(alertBadCertificate)
 			return nil, errors.New("tls: failed to parse client certificate: " + err.Error())
+		}
+
+		if !cert.IsCA {
+			certs = append(certs, cert)
 		}
 	}
 
